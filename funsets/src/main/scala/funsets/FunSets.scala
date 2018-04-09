@@ -44,7 +44,12 @@ object FunSets {
    * Returns the intersection of the two given sets,
    * the set of all elements that are both in `s` and `t`.
    */
-    def intersect(s: Set, t: Set): Set = ???
+    def intersect(s: Set, t: Set): Set = {
+      def uniF(i : Int) : Boolean = {
+        if(contains(t,i) && contains(s,i)) true else false
+      }
+      uniF
+    }
   
   /**
    * Returns the difference of the two given sets,
