@@ -45,22 +45,31 @@ object FunSets {
    * the set of all elements that are both in `s` and `t`.
    */
     def intersect(s: Set, t: Set): Set = {
-      def uniF(i : Int) : Boolean = {
+      def intF(i : Int) : Boolean = {
         if(contains(t,i) && contains(s,i)) true else false
       }
-      uniF
+      intF
     }
   
   /**
    * Returns the difference of the two given sets,
    * the set of all elements of `s` that are not in `t`.
    */
-    def diff(s: Set, t: Set): Set = ???
+    def diff(s: Set, t: Set): Set = {
+      def diffF(i : Int) : Boolean = {
+        if(!contains(t,i) && contains(s,i)) true else false
+      }
+      diffF
+
+    }
   
   /**
    * Returns the subset of `s` for which `p` holds.
    */
-    def filter(s: Set, p: Int => Boolean): Set = ???
+    def filter(s: Set, p: Int => Boolean): Set = {
+      // das prädikat p ist im Grunde auch nur ein Set...
+      intersect(s,p)
+    }
   
 
   /**
