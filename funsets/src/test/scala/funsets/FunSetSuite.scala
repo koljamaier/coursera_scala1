@@ -77,6 +77,8 @@ class FunSetSuite extends FunSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+    val s100 = singletonSet(100)
+    val s1337 = singletonSet(1000)
   }
 
   /**
@@ -140,6 +142,25 @@ class FunSetSuite extends FunSuite {
       val filteredSet: Set = filter(t,p)
       assert(contains(filteredSet, 3), "filtered 1")
       assert(!contains(filteredSet, 2), "filtered 2")
+    }
+  }
+
+  test("forall for a given set and predicate") {
+    new TestSets {
+      val s : Set = union(s1, s2)
+      val t : Set = union(s,s3)
+
+      val bigInts : Set = union(s100,s1337)
+
+      def p (i: Int): Boolean = {
+        if(i>2) true else false
+      }
+
+      val bo : Boolean = forall(t,p)
+      val bo1: Boolean = forall(bigInts,p)
+      assert(!bo, "not all elements are > 2")
+      assert(bo1, "all elements in bigints are > 2")
+
     }
   }
 
