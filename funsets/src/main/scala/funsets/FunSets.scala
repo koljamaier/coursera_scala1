@@ -81,24 +81,34 @@ object FunSets {
    * Returns whether all bounded integers within `s` satisfy `p`.
    */
     def forall(s: Set, p: Int => Boolean): Boolean = {
-    def iter(a: Int): Boolean = {
-      if (a==bound) contains(s,a) && p(a)
-      else if ((contains(s,a) && p(a)) || !contains(s,a)) iter(a+1)
-      else false
-    }
-    iter(-bound)
+      def iter(a: Int): Boolean = {
+        if (a==bound) (contains(s,a) && p(a)) || !contains(s,a)
+        else if ((contains(s,a) && p(a)) || !contains(s,a)) iter(a+1)
+        else false
+      }
+      iter(-bound)
   }
   
   /**
    * Returns whether there exists a bounded integer within `s`
    * that satisfies `p`.
    */
-    def exists(s: Set, p: Int => Boolean): Boolean = ???
+  // !forall(s,p)==true -> für mind. ein Element aus s trifft p nicht zu
+  // !forall(s,!p)==true -> für mind. ein Element aus s trifft nicht-p nicht zu -> für mind. ein Element aus s triff p zu
+    def exists(s: Set, p: Int => Boolean): Boolean = !forall(s,x => !p(x))
   
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
    */
-    def map(s: Set, f: Int => Int): Set = ???
+    def map(s: Set, f: Int => Int): Set = {
+        def iter(a: Int): Set = {
+          if(a>bound) singletonSet(bound+1)
+          else if (contains(s,a)) union(singletonSet(f(a)),iter(a+1))
+          else if (!contains(s,a)) iter(a+1)
+          else singletonSet(bound+1) // this creates an "empty" set (not in bounded range)
+        }
+        iter(-bound)
+    }
   
   /**
    * Displays the contents of a set
