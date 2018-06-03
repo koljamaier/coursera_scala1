@@ -209,9 +209,18 @@ object Huffman {
   /**
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
+   * Your implementation must traverse the coding tree for each character, a task that should be done using a helper function.
    */
     def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
-      
+
+      def traverse(t: CodeTree, txt: List[Char]): List[Bit] = {
+        t match {
+          case Leaf(c,w) => traverse(tree,txt.tail)
+          case Fork(l,r,c,w) if(!txt.isEmpty) => if(chars(l).contains(txt.head)) 0 :: traverse(l,txt) else 1 :: traverse(r,txt)
+          case _ => List()
+        }
+      }
+      traverse(tree, text)
     }
   
   // Part 4b: Encoding using code table
@@ -232,14 +241,19 @@ object Huffman {
    * a valid code tree that can be represented as a code table. Using the code tables of the
    * sub-trees, think of how to build the code table for the entire tree.
    */
-    def convert(tree: CodeTree): CodeTable = ???
+    def convert(tree: CodeTree): CodeTable = {
+      val allChars: List[Char] = chars(tree)
+      allChars.map(x => (x,encode(tree)(List(x))))
+    }
   
   /**
    * This function takes two code tables and merges them into one. Depending on how you
    * use it in the `convert` method above, this merge method might also do some transformations
    * on the two parameter code tables.
    */
-    def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = ???
+    def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = {
+      a union b
+    }
   
   /**
    * This function encodes `text` according to the code tree `tree`.
@@ -247,5 +261,19 @@ object Huffman {
    * To speed up the encoding process, it first converts the code tree to a code table
    * and then uses it to perform the actual encoding.
    */
-    def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+    def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+      val codeTableMap = convert(tree).toMap
+      text flatMap codeTableMap
+    }
   }
+
+object Main extends App {
+  import Huffman._
+
+  val t1 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
+  val enc1 = encode(t1)(string2Chars("abd"))
+  println( enc1 )
+  println( quickEncode(t1)(string2Chars("abd")) )
+
+  println( decodedSecret )
+}
