@@ -85,7 +85,6 @@ object Huffman {
    * The returned list should be ordered by ascending weights (i.e. the
    * head of the list should have the smallest weight), where the weight
    * of a leaf is the frequency of the character.
-    * changed
    */
     def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = {
       freqs.sortBy(_._2).map(tuple => Leaf(tuple._1,tuple._2))
