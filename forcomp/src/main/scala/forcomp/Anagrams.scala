@@ -32,9 +32,14 @@ object Anagrams {
    *  Note: the uppercase and lowercase version of the character are treated as the
    *  same character, and are represented as a lowercase character in the occurrence list.
    *
-   *  Note: you must use `groupBy` to implement this method!
+   *  Note: you must use `groupBy` to implement this method! *Not true :-)*
+    *
+    *  example: "hello" -> List((e,1),(h,1),(l,2),(o,1))
    */
-  def wordOccurrences(w: Word): Occurrences = ???
+  def wordOccurrences(w: Word): Occurrences = {
+    val z = w groupBy((c: Char) => c)
+    z.mapValues(_.length).toList.sorted
+  }
 
   /** Converts a sentence into its character occurrence list. */
   def sentenceOccurrences(s: Sentence): Occurrences = ???
