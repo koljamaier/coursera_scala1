@@ -119,12 +119,20 @@ object Anagrams {
    *  and has no zero-entries.
    */
   def subtract(x: Occurrences, y: Occurrences): Occurrences = {
-    /*
-    * 1.) transform to map
-    *
-     */
-    ???
+    def substr(m1: Map[Char, Int],m2: Map[Char, Int]) = {
+      //val m0 = m1 withDefaultValue(0)
+      //val m = m2 withDefaultValue(0)
+      def updateMape(m: Map[Char, Int], entry: (Char, Int)): Map[Char, Int] = {
+        val (key, value) = entry
+        val updatedValue = m(key)-value
+        if(updatedValue==0) { m - (key) }
+        else {m + (key -> updatedValue)}
+      }
+      (m2 foldLeft m1)(updateMape)
+    }
+    substr(x.sorted.toMap,y.sorted.toMap).toList.sorted
   }
+
 
   /** Returns a list of all anagram sentences of the given sentence.
    *
@@ -166,5 +174,28 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    /*
+    * 1.) Sentence in Occurences überführen: sentenceOccurrences
+    * 2.) combinations dieser occurences berechnen
+    * 3.) für jede Kombination: Schaue im dictionaryByOccurrences nach, welche Worte es dazu gibt
+    * 4.) Nehme ein (!!!) Wort heraus und wiederhole den Vorgang subtrahiere jedoch die occ-Repr. dieses Wortes von der Sentence-Repr
+     */
+
+    val sentenceOcc = sentenceOccurrences(sentence)
+    val sentenceCombis = combinations(sentenceOcc)
+    val dict = dictionaryByOccurrences withDefaultValue(List())
+
+    def anagram(occ: Occurrences) : List[Sentence] = {
+      if(occ.isEmpty) List(List())
+      else (
+        for {
+          comb <- combinations(occ)
+          word <- dict(comb)
+          furtherWord <- anagram(subtract(occ, comb))
+        } yield word :: furtherWord).toList
+    }
+
+    anagram(sentenceOcc)
+  }
 }
