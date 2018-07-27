@@ -1,14 +1,11 @@
 package streams
 
-import org.scalatest.FunSuite
-
 import org.junit.runner.RunWith
+import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
-import Bloxorz._
-
 @RunWith(classOf[JUnitRunner])
-class BloxorzSuite extends FunSuite {
+class terrainFunctionBloxorzSuite extends FunSuite {
 
   trait SolutionChecker extends GameDef with Solver with StringParserTerrain {
     /**

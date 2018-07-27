@@ -100,4 +100,10 @@ class AnagramsSuite extends FunSuite  {
     assert(sentenceAnagrams(sentence).toSet === anas.toSet)
   }
 
+  test("grape tape test") {
+    val sentence = List("grape", "tape")
+    sentenceAnagrams(sentence).toSet.foreach(println)
+    assert(1=== 1)
+  }
+
 }
