@@ -134,7 +134,7 @@ trait GameDef {
      */
     def neighbors: List[(Block, Move)] = {
       List(
-        (this.left, Left), (this.left, Left),
+        (this.left, Left), (this.right, Right),
         (this.up, Up), (this.down, Down)
       )
     }

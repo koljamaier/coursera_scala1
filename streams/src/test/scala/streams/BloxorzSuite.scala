@@ -23,6 +23,7 @@ class terrainFunctionBloxorzSuite extends FunSuite {
           case Down => block.down
         }
     }
+
   }
 
   trait Level1 extends SolutionChecker {
@@ -37,6 +38,18 @@ class terrainFunctionBloxorzSuite extends FunSuite {
       |------ooo-""".stripMargin
 
     val optsolution = List(Right, Right, Down, Right, Right, Right, Down)
+  }
+
+  trait Level2 extends SolutionChecker {
+    /* terrain for level 1*/
+
+    // Beachte: level ist abstrakt in den Klassen wie StringParserTerrain. Hier überschreiben wir es
+    val level =
+      """------
+        |--ST--
+        |--oo--
+        |--oo--
+        |------""".stripMargin
   }
 
 
@@ -74,5 +87,41 @@ class terrainFunctionBloxorzSuite extends FunSuite {
       assert(solution.length == optsolution.length)
     }
   }
+
+  test("neighborsWithHistory") {
+    new Level1 {
+      assert(!Block(Pos(1,1),Pos(1,1)).neighbors.isEmpty )
+
+      assert(neighborsWithHistory(Block(Pos(1,1),Pos(1,1)),List(Left,Up)).toSet == Set(
+        (Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+      ))
+      assert(!neighborsWithHistory(Block(Pos(1,1),Pos(1,1)),List(Left,Up)).isEmpty)
+
+
+    }
+  }
+
+  test("newNeighborsOnly") {
+    new Level1 {
+      val nN = newNeighborsOnly(
+        Set(
+          (Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+          (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+        ).toStream,
+
+        Set(Block(Pos(1,2),Pos(1,3)), Block(Pos(1,1),Pos(1,1)))
+      )
+
+      assert(nN == Set(
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+      ).toStream)
+
+
+    }
+  }
+
+
+
 
 }

@@ -54,8 +54,8 @@ trait StringParserTerrain extends GameDef {
     val map = for {
       row <- 0 until levelVector.length
       col <- 0 until levelVector(row).length
-    } yield Pos(row,col) -> (if(levelVector(row)(col) == '-') false else true)
-    map.toMap
+    } yield Pos(row,col) -> !(levelVector(row)(col) == '-')
+    map.toMap withDefaultValue false
   }
 
   /**
