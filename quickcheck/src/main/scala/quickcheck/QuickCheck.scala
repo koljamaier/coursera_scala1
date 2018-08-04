@@ -46,12 +46,19 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
         minItem :: deleteH(deleteMin(h))
       }
     }
-
     def isSorted(l : List[Int]) : Boolean = {
       l == l.sorted
     }
 
     isSorted(deleteH(h)) == true
+  }
+
+  property("min of melded heaps") = forAll { (h1: H, h2: H) =>
+    val m1 = findMin(h1)
+    val m2 = findMin(h2)
+    val minimum = if(m1<m2) m1 else m2
+
+    findMin(meld(h1,h2)) == minimum
   }
 
 }
