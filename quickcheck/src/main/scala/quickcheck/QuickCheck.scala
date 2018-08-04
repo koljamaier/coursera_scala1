@@ -26,4 +26,32 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
     val h = insert(a, empty)
     findMin(h) == a
   }
+
+  property("min input") = forAll { (a: Int, b: Int) =>
+    val minInput = if(a<b) a else b
+    val h = insert(b, insert(a, empty))
+    findMin(h) == minInput
+  }
+
+  property("check empty heap") = forAll { a: Int =>
+    val h = deleteMin(insert(a, empty))
+    isEmpty(h) == true
+  }
+
+  property("check ordered delete list") = forAll { (h: H) =>
+    def deleteH(h: H) : List[Int] = {
+      if(isEmpty(h)) List()
+      else {
+        val minItem = findMin(h)
+        minItem :: deleteH(deleteMin(h))
+      }
+    }
+
+    def isSorted(l : List[Int]) : Boolean = {
+      l == l.sorted
+    }
+
+    isSorted(deleteH(h)) == true
+  }
+
 }
